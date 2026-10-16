@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserAPI - Telegram Bot API Emulator Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --code-bg: #0b1120;
+            --success: #34d399;
+            --warning: #fbbf24;
+            --danger: #f87171;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            overflow-x: auto;
+            color: #e2e8f0;
+            margin: 0.75rem 0;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #38bdf8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--bg-tertiary);
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .tag-supported {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .tag-unsupported {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .tag-extra {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .alert {
+            background-color: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+            color: #fef3c7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <span class="badge">Open Source • MIT License</span>
+        <h1>UserAPI Documentation</h1>
+        <p class="subtitle">A full-featured Telegram Bot API replica powered by Telethon and FastAPI, seamlessly routing bot requests to real Telegram user accounts.</p>
+    </header>
+
+    <div class="container">
+
+        <h2 class="section-title">🚀 Quick Start Flow</h2>
+        <div class="grid">
+            <div class="card">
+                <h2>1. Register Session</h2>
+                <p>Upload a <code>.session</code> file or provide a <code>StringSession</code> along with your <code>api_id</code> and <code>api_hash</code>.</p>
+                <pre>curl -X POST "http://localhost:8000/auth/register" \
+  -F "file=@my_account.session" \
+  -F "api_id=1234567" \
+  -F "api_hash=0123456789abcdef0123456789abcdef"</pre>
+            </div>
+
+            <div class="card">
+                <h2>2. Get User Token</h2>
+                <p>The server assigns you a secure, unique user token formatted as:</p>
+                <pre>{
+  "ok": true,
+  "result": {
+    "token": "usr_94b5e28a01...",
+    "user": { "id": 12345, "first_name": "Alex" }
+  }
+}</pre>
+            </div>
+
+            <div class="card">
+                <h2>3. Call Bot API</h2>
+                <p>Call endpoints exactly like the Telegram Bot API using <code>/{token}/</code> or <code>/bot{token}/</code>.</p>
+                <pre>curl -X POST "http://localhost:8000/bot<TOKEN>/sendMessage" \
+  -H "Content-Type: application/json" \
+  -d '{"chat_id": "@channel", "text": "Hello!"}'</pre>
+            </div>
+        </div>
+
+        <h2 class="section-title">🌐 Proxy Configuration (MTProto, SOCKS5, HTTP)</h2>
+        <p>Each user session can have its own dedicated proxy. You can supply proxy settings upon registration or configure them on the fly:</p>
+
+        <div class="grid">
+            <div class="card">
+                <h2>SOCKS5 / HTTP Proxy</h2>
+                <p>Configure a SOCKS5 or HTTP proxy dynamically:</p>
+                <pre>curl -X POST "http://localhost:8000/bot<TOKEN>/setProxy" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "proxy": "socks5://user:pass@1.2.3.4:1080"
+  }'</pre>
+            </div>
+
+            <div class="card">
+                <h2>MTProto Proxy</h2>
+                <p>Native Telegram MTProto randomized intermediate proxy:</p>
+                <pre>curl -X POST "http://localhost:8000/bot<TOKEN>/setProxy" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "proxy": {
+      "type": "mtproto",
+      "host": "proxy.server.com",
+      "port": 443,
+      "secret": "dd00000000000000000000000000000000"
+    }
+  }'</pre>
+            </div>
+        </div>
+
+        <h2 class="section-title">🤖 Official Telegram Bot Reverse Proxy with Proxy Relay</h2>
+        <p>UserAPI can also serve as an intelligent proxy middleman for official Telegram bots created via @BotFather. Connect bots through SOCKS5 or HTTP proxies to bypass censorship or network filters:</p>
+        <div class="grid">
+            <div class="card">
+                <h2>1. Register Bot or Call On-the-Fly</h2>
+                <p>Register your BotFather token or call directly with <code>/bot&lt;TOKEN&gt;/&lt;METHOD&gt;</code>:</p>
+                <pre>curl -X POST "http://localhost:8000/auth/register_bot" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bot_token": "123456789:AAFxxx...",
+    "proxy": "socks5://user:pass@127.0.0.1:1080"
+  }'</pre>
+            </div>
+            <div class="card">
+                <h2>2. Configure Bot Proxy Dynamically</h2>
+                <p>Set, inspect, or delete proxies for any bot token:</p>
+                <pre># Set Proxy
+curl -X POST "http://localhost:8000/bot<BOT_TOKEN>/setProxy" \
+  -H "Content-Type: application/json" \
+  -d '{"proxy": "socks5://127.0.0.1:1080"}'
+
+# Delete Proxy
+curl -X POST "http://localhost:8000/bot<BOT_TOKEN>/deleteProxy"</pre>
+            </div>
+        </div>
+
+        <h2 class="section-title">🔄 Token Rotation & Session Lifecycle (Unlink vs Terminate)</h2>
+        <div class="grid">
+            <div class="card">
+                <h2>Rotate API Token</h2>
+                <p>Regenerate or customize your API token without re-logging in or losing session state:</p>
+                <pre>curl -X POST "http://localhost:8000/bot<TOKEN>/rotateToken" \
+  -H "Content-Type: application/json" \
+  -d '{"new_token": "optional_custom_token"}'</pre>
+            </div>
+
+            <div class="card">
+                <h2>Unlink from Server Only</h2>
+                <p>Removes session files and tokens from the server <strong>WITHOUT</strong> logging out of Telegram (session stays active on your phone):</p>
+                <pre>curl -X POST "http://localhost:8000/bot<TOKEN>/unlink"
+# Or standard Telegram method:
+curl -X POST "http://localhost:8000/bot<TOKEN>/close"</pre>
+            </div>
+
+            <div class="card">
+                <h2>Terminate Telegram Session</h2>
+                <p>Completely logs out from Telegram servers (terminating session) and wipes local server data:</p>
+                <pre>curl -X POST "http://localhost:8000/bot<TOKEN>/terminate"
+# Or standard Telegram method:
+curl -X POST "http://localhost:8000/bot<TOKEN>/logOut"</pre>
+            </div>
+        <h2 class="section-title">💾 Session Export & Backup</h2>
+        <div class="grid">
+            <div class="card">
+                <h2>Export Session File (.session)</h2>
+                <p>Download the authentic Telethon SQLite <code>.session</code> binary file for your account:</p>
+                <pre>curl -O -J "http://localhost:8000/session/export_file?token=usr_xxxx"
+# Or Bot API method:
+curl -X POST "http://localhost:8000/bot<TOKEN>/exportFile"</pre>
+            </div>
+
+            <div class="card">
+                <h2>Export StringSession & Metadata</h2>
+                <p>Retrieve StringSession, API credentials, and account details in JSON:</p>
+                <pre>curl "http://localhost:8000/session/export?token=usr_xxxx"
+# Or Bot API method:
+curl -X POST "http://localhost:8000/bot<TOKEN>/exportSession"</pre>
+            </div>
+
+            <div class="card">
+                <h2>Export Full ZIP Backup</h2>
+                <p>Download a complete ZIP archive containing the <code>.session</code> file and <code>session_info.json</code>:</p>
+                <pre>curl -O -J "http://localhost:8000/session/export_all?token=usr_xxxx"</pre>
+            </div>
+        </div>
+
+        <h2 class="section-title">📁 File Upload, Download & Media Parity</h2>
+        <div class="grid">
+            <div class="card">
+                <h2>getFile & File Download</h2>
+                <p>Get file metadata and download files directly via standard Bot API file path:</p>
+                <pre># 1. Get file path
+curl -X POST "http://localhost:8000/bot<TOKEN>/getFile" \
+  -H "Content-Type: application/json" \
+  -d '{"file_id": "msg_12345_doc"}'
+
+# 2. Download file
+curl -O "http://localhost:8000/file/bot<TOKEN>/<file_path>"</pre>
+            </div>
+
+            <div class="card">
+                <h2>Rich Media & Extended Bot API</h2>
+                <p>Full parity with Bot API media & interaction methods:</p>
+                <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.9rem;">
+                    <li><code>sendMediaGroup</code>: Send albums of photos and videos</li>
+                    <li><code>sendPoll</code>: Create regular or quiz polls</li>
+                    <li><code>sendDice</code>: Send animated dice / darts / basketball</li>
+                    <li><code>setMessageReaction</code>: Add emoji reactions to messages</li>
+                    <li><code>banChatMember</code> & <code>unbanChatMember</code></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Public Proxy Tester</h2>
+                <p>Public latency and connectivity test endpoint (no token required):</p>
+                <pre>curl "http://localhost:8000/proxy/test?proxy=socks5://127.0.0.1:1080"
+# Returns:
+# {"ok": true, "result": {"alive": true, "latency_ms": 42.5}}</pre>
+            </div>
+        </div>
+
+        <h2 class="section-title">🛡️ Admin Dashboard & Storage Quota</h2>
+        <div class="grid">
+            <div class="card">
+                <h2>Admin Authentication</h2>
+                <p>Set <code>ADMIN_TOKEN</code> in <code>.env</code> to access management endpoints via <code>X-Admin-Token</code> or <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+                <pre>curl -H "X-Admin-Token: your_secret_admin_token" \
+  "http://localhost:8000/admin/stats"</pre>
+            </div>
+
+            <div class="card">
+                <h2>Manage Sessions & Quotas</h2>
+                <p>Inspect all registered sessions, view storage used, or update quotas per user:</p>
+                <pre># List all sessions:
+curl -H "X-Admin-Token: secret" "http://localhost:8000/admin/sessions"
+
+# Update storage quota (MB):
+curl -X PUT -H "X-Admin-Token: secret" \
+  "http://localhost:8000/admin/sessions/<TOKEN>/quota?quota_mb=200"</pre>
+            </div>
+        </div>
+
+        <h2 class="section-title">📊 Feature Compatibility Matrix</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Method / Feature</th>
+                    <th>Status</th>
+                    <th>Notes & Telethon Userbot Translation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>getMe</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Returns real user account details formatted as standard Bot API User</td>
+                </tr>
+                <tr>
+                    <td><code>sendMessage</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Supports text, HTML/Markdown parse_mode, reply_to, schedule_date</td>
+                </tr>
+                <tr>
+                    <td><code>sendPhoto</code>, <code>sendDocument</code>, <code>sendVideo</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Supports multipart file uploads, URLs, and captions</td>
+                </tr>
+                <tr>
+                    <td><code>forwardMessage</code>, <code>copyMessage</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Copies or forwards messages across any accessible chats</td>
+                </tr>
+                <tr>
+                    <td><code>editMessageText</code>, <code>editMessageCaption</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Edits user's messages</td>
+                </tr>
+                <tr>
+                    <td><code>deleteMessage</code>, <code>deleteMessages</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Deletes individual or batch messages</td>
+                </tr>
+                <tr>
+                    <td><code>pinChatMessage</code>, <code>unpinChatMessage</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Pins and unpins messages</td>
+                </tr>
+                <tr>
+                    <td><code>getChat</code>, <code>getChatAdministrators</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Fetches chat details, members count, admin lists</td>
+                </tr>
+                <tr>
+                    <td><code>sendMediaGroup</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Sends multi-item photo/video media albums</td>
+                </tr>
+                <tr>
+                    <td><code>sendPoll</code>, <code>sendDice</code>, <code>sendSticker</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Full support for native Telegram polls, animated dice/darts, and stickers</td>
+                </tr>
+                <tr>
+                    <td><code>setMessageReaction</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Sets or clears emoji reactions on messages</td>
+                </tr>
+                <tr>
+                    <td><code>getFile</code> & <code>/file/...</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Retrieves file metadata & downloads directly through Bot API file URLs</td>
+                </tr>
+                <tr>
+                    <td><code>uploadFile</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Uploads files to user storage and returns reusable Bot API file_ids</td>
+                </tr>
+                <tr>
+                    <td><code>setChatDescription</code>, <code>exportChatInviteLink</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Manages chat descriptions and generates invite links</td>
+                </tr>
+                <tr>
+                    <td><code>banChatMember</code>, <code>unbanChatMember</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Kicks/bans and unbans chat participants</td>
+                </tr>
+                <tr>
+                    <td><code>getUpdates</code> & <code>setWebhook</code></td>
+                    <td><span class="tag-supported">SUPPORTED</span></td>
+                    <td>Buffered long-polling or webhook dispatch for incoming messages</td>
+                </tr>
+                <tr>
+                    <td><code>joinChat</code></td>
+                    <td><span class="tag-extra">USERBOT EXTENSION</span></td>
+                    <td>Joins public channels or private invite links (t.me/+hash)</td>
+                </tr>
+                <tr>
+                    <td><code>getDialogs</code></td>
+                    <td><span class="tag-extra">USERBOT EXTENSION</span></td>
+                    <td>Lists conversations, unread counters, and last messages</td>
+                </tr>
+                <tr>
+                    <td><code>markAsRead</code></td>
+                    <td><span class="tag-extra">USERBOT EXTENSION</span></td>
+                    <td>Marks incoming unread messages as read</td>
+                </tr>
+                <tr>
+                    <td><code>setMyCommands</code>, <code>getMyCommands</code></td>
+                    <td><span class="tag-unsupported">BOT-ONLY</span></td>
+                    <td>Returns <code>400 Bad Request</code> with explanation: user accounts lack bot scopes</td>
+                </tr>
+                <tr>
+                    <td><code>answerCallbackQuery</code></td>
+                    <td><span class="tag-unsupported">BOT-ONLY</span></td>
+                    <td>Returns <code>400 Bad Request</code>: user accounts do not receive inline button queries</td>
+                </tr>
+                <tr>
+                    <td>Inline keyboards with <code>callback_data</code></td>
+                    <td><span class="tag-unsupported">BOT-ONLY</span></td>
+                    <td>Returns <code>400 Bad Request</code>: user sessions cannot handle callback_data</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert">
+            <strong>Note on Bot-Only Restrictions:</strong> When a client attempts to use bot-exclusive features such as command menus, callback buttons, or invoice creation, UserAPI returns a compliant Telegram Bot API error JSON (e.g. <code>{"ok": false, "error_code": 400, "description": "..."}</code>) clearly explaining why Telegram user sessions cannot execute that action.
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>UserAPI • Licensed under the MIT License • Built with Telethon & FastAPI</p>
+    </div>
+
+</body>
+</html>
