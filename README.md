@@ -11,6 +11,20 @@ Existing Telegram bot libraries (`aiogram`, `python-telegram-bot`, `telegraf`, e
 
 ---
 
+## ⚠️ Disclaimer
+
+This project is provided **for educational and personal use only**.
+
+- **Telegram Terms of Service**: Using user accounts via unofficial APIs (userbots) may violate Telegram's ToS. You are solely responsible for how you use this software and any consequences on your Telegram account(s).
+- **No warranty**: The authors are not responsible for account bans, data loss, legal issues, or any damage caused by this software.
+- **Do not host publicly**: Running this as a public service for third parties may expose you to legal liability. If you do, secure it with HTTPS, strong admin tokens, rate limiting, and firewall rules.
+- **Secrets**: Never commit `.env` files, `.session` files, `api_hash`, or bot tokens. Rotate credentials immediately if leaked.
+- **No telemetry**: This project does not phone home. All data stays on your server.
+
+By using this software you accept full responsibility for compliance with all applicable laws and platform policies.
+
+---
+
 ## ✨ Features
 
 - **🔄 Drop-In Telegram Bot API Emulation**:
